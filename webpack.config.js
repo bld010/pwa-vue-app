@@ -1,3 +1,5 @@
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+
 const path = require('path')
 
 const { VueLoaderPlugin } = require('vue-loader')
@@ -62,7 +64,15 @@ module.exports = (env, argv) => ({
       from: path.resolve(__dirname, 'static'),
       to: path.resolve(__dirname, 'dist'),
       toType: 'dir'
-    }])
+    }]),
+    new SWPrecacheWebpackPlugin({
+      cacheId: 'my-pwa-vue-app',
+      filename: 'service-worker-cache.js',
+      staticFileGlobs: ['dist/**/*.{js,css}', '/'],
+      minify: true,
+      stripPrefix: 'dist/',
+      dontCacheBustUrlsMatching: /\.\w{6}\./
+    })
   ],
 
   optimization: {
